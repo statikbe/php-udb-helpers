@@ -8,7 +8,7 @@ enum Environments
 
     case PROD;
 
-    public function getJWTUrl()
+    public function getJWTUrl(): string
     {
         return match ($this) {
             self::TEST => 'https://jwt-test.uitdatabank.be',
@@ -16,7 +16,7 @@ enum Environments
         };
     }
 
-    public function getEndpoint()
+    public function getEndpoint(): string
     {
         return match ($this) {
             self::TEST => 'https://io-test.uitdatabank.be',

@@ -12,7 +12,7 @@ class ApiService extends AuthService
 {
     private string $accessToken;
 
-    private $endpoint;
+    private string $endpoint;
 
     private Environments $environment;
 
@@ -161,7 +161,7 @@ class ApiService extends AuthService
 
                 if (curl_error($ch)) {
                     $tries++;
-                    Statik::getInstance()->udbAuth->refreshAccessToken();
+                    $this->refreshAccessToken();
                     continue;
                 }
 
