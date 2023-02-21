@@ -33,13 +33,13 @@ class EntryAPI
         return $this->api->get('/places/' . $id);
     }
 
-    public function searchOrganizations($params = [])
+    public function searchOrganizers($params = [])
     {
 
         return $this->api->get('/organizers', $params);
     }
 
-    public function getOrganization($id)
+    public function getOrganizer($id)
 
     {
         return $this->api->get('/organizers/' . $id);

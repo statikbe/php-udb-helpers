@@ -50,3 +50,32 @@ Save both tokens in the json file the specified above, formatted like this:
 
 ## Usage
 
+Once you've authenticated with the API, you can use the following functions:
+
+
+### Searching for places
+````php
+$udb->searchPlaces([]);
+````
+The function takes on array of potential search parameters, those can be found [here](https://docs.publiq.be/docs/uitdatabank/search-api/reference/operations/list-places)
+
+
+### Get all details for a specific place
+````php
+$udb->getPlace($placeId);
+````
+
+### Searching for Organizers
+````php
+$udb->searchOrganizers([]);
+````
+The function takes on array of potential search parameters, those can be found [here](https://docs.publiq.be/docs/uitdatabank/search-api/reference/operations/list-organizers)
+
+
+### Get all details for a specific organizer
+````php
+$udb->getOrganizer($organizerId);
+````
+
+
+// More to be added as we further develop this package.
