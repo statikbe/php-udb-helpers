@@ -1,0 +1,21 @@
+{
+  "name": "statikbe/udb-helpers",
+  "description": "Helper & authentication functions for uitdatabank",
+  "version": "1.0.0",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Statik.be",
+      "homepage": "https://www.statik.be"
+    }
+  ],
+  "require": {
+    "ext-curl": "*",
+    "guzzlehttp/guzzle": "^6.0|^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "statikbe\\udb\\": "src/"
+    }
+  }
+}
