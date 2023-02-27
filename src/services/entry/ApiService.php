@@ -6,57 +6,61 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use statikbe\udb\Environments;
-
+use statikbe\udb\services\authentication\AuthService;
 
 class ApiService extends AuthService
 {
-    private string $accessToken;
+    protected string $accessToken;
 
-    private string $endpoint;
+    protected string $endpoint;
 
-    private Environments $environment;
+    //private Environments $environment;
 
+    /**
+     * @throws \Exception
+     */
     public function __construct($apiKey, $storagePath, Environments $environment)
     {
         parent::__construct($apiKey, $storagePath, $environment);
         $this->apiKey = $apiKey;
-        $this->environment = $environment;
         $this->endpoint = $environment->getEndpoint();
         $this->accessToken = $this->getAccessToken();
     }
 
-
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \JsonException
+     */
     public function sendJsonRequest($data, $endPoint, $method = "POST", $headers = [], $baseUrl = null)
     {
         $client = new Client();
         if ($baseUrl) {
             $uri = $baseUrl . $endPoint;
         } else {
-            $uri = $this->udbUrl . $endPoint;
+            $uri = $this->environment->getEndpoint();
         }
         $responseStatus = null;
         $tries = 0;
         $returnData = [];
+        $originalHeaders = $headers;
 
         while ($responseStatus !== 200 && $tries < 2) {
             // This part is needed to renew the request headers when auth has failed
-            $headers = array_merge($headers, [
+            $headers = array_merge($originalHeaders, [
                 "Authorization" => "Bearer {$this->accessToken}",
                 "X-Api-Key" => $this->apiKey,
             ]);
             try {
                 $request = new Request(
-                    $method, $uri, $headers, Json::encode($data)
+                    $method, $uri, $headers, json_encode($data, JSON_THROW_ON_ERROR)
                 );
 
                 $response = $client->send($request);
 
-                if ($response) {
-                    $responseStatus = $response->getStatusCode();
+                $responseStatus = $response->getStatusCode();
 
-                    if ($responseStatus == 204) {
-                        break;
-                    }
+                if ($responseStatus === 204) {
+                    break;
                 }
 
                 return json_decode(
@@ -70,65 +74,37 @@ class ApiService extends AuthService
                     $this->refreshAccessToken();
                     continue;
                 }
-            } catch (\Exception $e) {
-                throw $e;
             }
         }
 
         return $returnData;
     }
 
-    public function get($path, $parameters = [])
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \JsonException
+     */
+    public function get($request)
     {
-
-        $url = $this->endpoint . $path;
-        if ($parameters) {
-            $url = $url . '?' . http_build_query($parameters);
-        }
-
         $client = new Client();
-        $responseStatus = null;
-        $tries = 0;
 
-        try {
-            while ($responseStatus !== 200 && $tries < 2) {
-                try {
-                    $tries++;
+        $response = $client->send($request);
 
-                    $headers = [
-                        "Authorization" => "Bearer {$this->accessToken}",
-                        "X-Api-Key" => $this->apiKey,
-                    ];
-
-                    $request = new Request(
-                        'GET', $url, $headers
-                    );
-
-                    $response = $client->send($request);
-                    $returnData = json_decode(
-                        utf8_encode($response->getBody()->getContents()),
-                        true,
-                        512,
-                        JSON_THROW_ON_ERROR
-                    );
-                    return $returnData;
-
-                } catch (ClientException $e) {
-                    if ($e->getResponse()->getStatusCode() === 401 || $e->getResponse()->getStatusCode() === 403) {
-                        $this->refreshAccessToken();
-                        continue;
-                    }
-                }
-            }
-        } catch (\Throwable $e) {
-            throw $e;
-        }
-
-        return $responseStatus;
-
+        return json_decode(
+            utf8_encode($response->getBody()->getContents()),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
     }
 
     // Function is used to send Files (images) to UIT
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Throwable
+     * @throws \JsonException
+     */
     public function sendDataRequest($data, $endPoint)
     {
         $responseStatus = null;
@@ -139,7 +115,6 @@ class ApiService extends AuthService
             try {
                 $ch = curl_init();
                 $curlData['file'] = curl_file_create($data['file'], 'image/jpeg');
-
 
                 curl_setopt($ch, CURLOPT_URL, $this->udbUrl . $endPoint);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -165,22 +140,16 @@ class ApiService extends AuthService
                     continue;
                 }
 
-                $response = json_decode(utf8_encode($bodyResponse), true, 512, JSON_THROW_ON_ERROR);
-
-                return $response;
+                return json_decode(utf8_encode($bodyResponse), true, 512, JSON_THROW_ON_ERROR);
             } catch (ClientException $e) {
                 $tries++;
                 if ($e->getResponse()->getStatusCode() === 401 || $e->getResponse()->getStatusCode() === 403) {
                     $this->refreshAccessToken();
                     continue;
                 }
-
-            } catch (\Throwable $e) {
-                throw $e;
             }
         }
 
         return $responseStatus;
     }
-
 }
