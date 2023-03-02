@@ -33,6 +33,16 @@ class EntryAPI
         return $this->api->get('/places/' . $id);
     }
 
+    public function createPlace($data): array
+    {
+        return $this->api->post($data, '/places');
+    }
+
+    public function createOrganizer($data): array
+    {
+        return $this->api->post($data, '/organizers');
+    }
+
     public function searchOrganizers($params = [])
     {
 

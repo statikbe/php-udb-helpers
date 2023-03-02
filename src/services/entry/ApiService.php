@@ -26,27 +26,23 @@ class ApiService extends AuthService
     }
 
 
-    public function sendJsonRequest($data, $endPoint, $method = "POST", $headers = [], $baseUrl = null)
+    public function post($data, $endPoint, $method = "POST", $headers = [], $baseUrl = null)
     {
         $client = new Client();
-        if ($baseUrl) {
-            $uri = $baseUrl . $endPoint;
-        } else {
-            $uri = $this->udbUrl . $endPoint;
-        }
+        $uri = $this->endpoint . $endPoint;
         $responseStatus = null;
         $tries = 0;
         $returnData = [];
 
         while ($responseStatus !== 200 && $tries < 2) {
-            // This part is needed to renew the request headers when auth has failed
+            $tries++;
             $headers = array_merge($headers, [
                 "Authorization" => "Bearer {$this->accessToken}",
                 "X-Api-Key" => $this->apiKey,
             ]);
             try {
                 $request = new Request(
-                    $method, $uri, $headers, Json::encode($data)
+                    $method, $uri, $headers, json_encode($data)
                 );
 
                 $response = $client->send($request);
@@ -58,7 +54,6 @@ class ApiService extends AuthService
                         break;
                     }
                 }
-
                 return json_decode(
                     utf8_encode($response->getBody()->getContents()),
                     true,
@@ -70,10 +65,13 @@ class ApiService extends AuthService
                     $this->refreshAccessToken();
                     continue;
                 }
+                throw $e;
             } catch (\Exception $e) {
+
                 throw $e;
             }
         }
+
 
         return $returnData;
     }

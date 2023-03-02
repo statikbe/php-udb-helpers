@@ -65,6 +65,15 @@ The function takes on array of potential search parameters, those can be found [
 $udb->getPlace($placeId);
 ````
 
+### Create a place
+The data passed should be an array, with fields that match the [place model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/create-a-place).
+````php
+$udb->createPlace($data);
+````
+
+
+---
+
 ### Searching for Organizers
 ````php
 $udb->searchOrganizers([]);
@@ -75,6 +84,12 @@ The function takes on array of potential search parameters, those can be found [
 ### Get all details for a specific organizer
 ````php
 $udb->getOrganizer($organizerId);
+````
+
+### Create an organizer
+The data passed should be an array, with fields that match the [organizer model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/create-a-organizer).
+````php
+$udb->createOrganizer($data);
 ````
 
 
