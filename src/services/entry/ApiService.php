@@ -37,7 +37,7 @@ class ApiService extends AuthService
         while ($responseStatus !== 200 && $tries < 2) {
             $tries++;
             $headers = array_merge($headers, [
-                "Authorization" => "Bearer {$this->accessToken}",
+                "Authorization" => "Bearer {$this->getAccessToken()}",
                 "X-Api-Key" => $this->apiKey,
             ]);
             try {
@@ -94,7 +94,7 @@ class ApiService extends AuthService
                     $tries++;
 
                     $headers = [
-                        "Authorization" => "Bearer {$this->accessToken}",
+                        "Authorization" => "Bearer {$this->getAccessToken()}",
                         "X-Api-Key" => $this->apiKey,
                     ];
 
@@ -180,5 +180,4 @@ class ApiService extends AuthService
 
         return $responseStatus;
     }
-
 }
