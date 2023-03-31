@@ -92,5 +92,18 @@ The data passed should be an array, with fields that match the [organizer model]
 $udb->createOrganizer($data);
 ````
 
+---
+
+### Create an event
+The data passed should be an array, with fields that match the [event model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/create-a-event).
+````php
+$udb->createEvent($data);
+````
+
+### Update an event
+The data passed should be an array, with fields that match the [event model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/update-a-event).
+````php
+$udb->updateEvent($eventId, $data);
+````
 
 // More to be added as we further develop this package.
