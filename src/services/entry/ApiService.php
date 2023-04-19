@@ -127,7 +127,7 @@ class ApiService extends AuthService
     }
 
     // Function is used to send Files (images) to UIT
-    public function sendDataRequest($data, $endPoint)
+    public function postMultiPart($data, $endPoint)
     {
         $responseStatus = null;
         $tries = 0;
@@ -135,11 +135,12 @@ class ApiService extends AuthService
 
         while ($responseStatus !== 200 && $tries < 2) {
             try {
+                $tries++;
                 $ch = curl_init();
                 $curlData['file'] = curl_file_create($data['file'], 'image/jpeg');
 
 
-                curl_setopt($ch, CURLOPT_URL, $this->udbUrl . $endPoint);
+                curl_setopt($ch, CURLOPT_URL, $this->endpoint . $endPoint);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_POST, 1);
 
@@ -167,7 +168,6 @@ class ApiService extends AuthService
 
                 return $response;
             } catch (ClientException $e) {
-                $tries++;
                 if ($e->getResponse()->getStatusCode() === 401 || $e->getResponse()->getStatusCode() === 403) {
                     $this->refreshAccessToken();
                     continue;
