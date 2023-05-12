@@ -106,4 +106,10 @@ The data passed should be an array, with fields that match the [event model](htt
 $udb->updateEvent($eventId, $data);
 ````
 
+### Update the workflowStatus of an event
+The data passed should be an array, with fields that match the [workflowStatus model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/update-a-event-workflow-status).
+````php
+$udb->updateWorkflowStatus($eventId, $data);
+````
+
 // More to be added as we further develop this package.

@@ -65,6 +65,11 @@ class EntryAPI
         return $this->api->post($data, '/events/'.$id, "PUT");
     }
 
+    public function updateWorkflowStatus($id, $data)
+    {
+        return $this->api->post($data, '/events/'.$id.'/workflow-status', "PUT");
+    }
+
     public function createMediaObject($data)
     {
         return $this->api->postMultiPart($data, '/images');
