@@ -76,6 +76,56 @@ class ApiService extends AuthService
         return $returnData;
     }
 
+    public function delete($path, $parameters = [])
+    {
+
+        $url = $this->endpoint . $path;
+        if ($parameters) {
+            $url = $url . '?' . http_build_query($parameters);
+        }
+
+        $client = new Client();
+        $responseStatus = null;
+        $tries = 0;
+
+        try {
+            while ($responseStatus !== 200 && $tries < 2) {
+                try {
+                    $tries++;
+
+                    $headers = [
+                        "Authorization" => "Bearer {$this->getAccessToken()}",
+                        "X-Api-Key" => $this->apiKey,
+                    ];
+
+                    $request = new Request(
+                        'DELETE', $url, $headers
+                    );
+
+                    $response = $client->send($request);
+                    $returnData = json_decode(
+                        utf8_encode($response->getBody()->getContents()),
+                        true,
+                        512,
+                        JSON_THROW_ON_ERROR
+                    );
+                    return $returnData;
+
+                } catch (ClientException $e) {
+                    if ($e->getResponse()->getStatusCode() === 401 || $e->getResponse()->getStatusCode() === 403) {
+                        $this->refreshAccessToken();
+                        continue;
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            throw $e;
+        }
+
+        return $responseStatus;
+
+    }
+
     public function get($path, $parameters = [])
     {
 
