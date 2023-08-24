@@ -65,6 +65,11 @@ class EntryAPI
         return $this->api->post($data, '/events/'.$id, "PUT");
     }
 
+    public function deleteEvent($id): array
+    {
+        return $this->api->delete('/events/'.$id);
+    }
+
     public function updateWorkflowStatus($id, $data)
     {
         return $this->api->post($data, '/events/'.$id.'/workflow-status', "PUT");
