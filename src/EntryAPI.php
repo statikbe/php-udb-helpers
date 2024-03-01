@@ -35,6 +35,17 @@ class EntryAPI
 
     public function createPlace($data): array
     {
+        $address = $data['address']['nl'];
+
+        $params = ["embed" => true, "q" => "name:{$data['name']['nl']} AND address.nl.streetAddress:{$address['streetAddress']} AND address.nl.postalCode:{$address['postalCode']}", "disableDefaultFilters" => true, "languages" => ["nl"]];
+
+        $existingPlace = $this->searchPlaces($params);
+
+        if ($existingPlace && $existingPlace['totalItems'] > 0) {
+            $placeId = $this->parseId($existingPlace['member']['0']['@id']);
+            return $this->getPlace($placeId);
+        }
+
         return $this->api->post($data, '/places');
     }
 
@@ -62,26 +73,32 @@ class EntryAPI
 
     public function updateEvent($id, $data): array
     {
-        return $this->api->post($data, '/events/'.$id, "PUT");
+        return $this->api->post($data, '/events/' . $id, "PUT");
     }
 
     public function deleteEvent($id): array
     {
-        return $this->api->delete('/events/'.$id);
+        return $this->api->delete('/events/' . $id);
     }
 
     public function updateWorkflowStatus($id, $data)
     {
-        return $this->api->post($data, '/events/'.$id.'/workflow-status', "PUT");
+        return $this->api->post($data, '/events/' . $id . '/workflow-status', "PUT");
     }
 
     public function updatePlaceWorkflowStatus($id, $data)
     {
-        return $this->api->post($data, '/places/'.$id.'/workflow-status', "PUT");
+        return $this->api->post($data, '/places/' . $id . '/workflow-status', "PUT");
     }
 
     public function createMediaObject($data)
     {
         return $this->api->postMultiPart($data, '/images');
+    }
+
+    private function parseId($string): string
+    {
+        $parts = explode('/', $string);
+        return end($parts);
     }
 }
