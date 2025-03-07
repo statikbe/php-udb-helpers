@@ -3,10 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.6.1 - 2025-03-07
+### Fixed
+- Fixed a bug in the `delete` function
+
 ## 1.6.0 - 2024-03-01
 ### Added
 - Before creating a new place, we now search for an exact match and if that exists we don't create the new place (following documentation [here](https://docs.publiq.be/docs/uitdatabank/entry-api/places/finding-and-reusing-places))
-
 
 ## 1.5.0 - 2023-08-24
 ### Added
