@@ -76,7 +76,7 @@ class ApiService extends AuthService
         return $returnData;
     }
 
-    public function delete($path, $parameters = [])
+    public function delete($path, $parameters = []): bool
     {
 
         $url = $this->endpoint . $path;
@@ -103,14 +103,9 @@ class ApiService extends AuthService
                     );
 
                     $response = $client->send($request);
-                    $returnData = json_decode(
-                        utf8_encode($response->getBody()->getContents()),
-                        true,
-                        512,
-                        JSON_THROW_ON_ERROR
-                    );
-                    return $returnData;
-
+                    if($response->getStatusCode() == 204) {
+                        return true;
+                    }
                 } catch (ClientException $e) {
                     if ($e->getResponse()->getStatusCode() === 401 || $e->getResponse()->getStatusCode() === 403) {
                         $this->refreshAccessToken();
