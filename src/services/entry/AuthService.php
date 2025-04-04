@@ -43,14 +43,16 @@ class AuthService
     /** Use this function the first time to create your tokens.
      * And manually save them in /data/udb-tokens/credentials.json
      *
+     * Use the destination parameter to set the redirect URL.
+     *
      * {
      *   "accessToken":"access_token_from_url",
      *   "refreshToken":"refresh_token_from_url",
      * }
      */
-    public function generalJwtUrl(): string
+    public function generalJwtUrl($destination = "oob"): string
     {
-        return $this->jwtUrl . '/connect?apiKey=' . $this->apiKey . '&destination=oob';
+        return $this->jwtUrl . '/connect?apiKey=' . $this->apiKey . "&destination={$destination}";
     }
 
     public function refreshAccessToken(): void
