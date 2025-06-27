@@ -34,6 +34,8 @@ class AuthService
                 $credentials = json_decode($file, true);
                 if(!$credentials || !isset($credentials['access_token'])) {
                     $this->refreshAccessToken();
+                    $file = file_get_contents($this->storagePath); // Re-read the updated token file
+                    $credentials = json_decode($file, true);
                 }
                 return $credentials['access_token'];
             }
