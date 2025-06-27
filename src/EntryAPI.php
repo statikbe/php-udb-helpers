@@ -11,11 +11,12 @@ class EntryAPI
 
     public ApiService $api;
 
-    public function __construct(string $apiKey, string $storagePath, $environment = Environments::PROD)
+    public function __construct(string $clientId, $clientSecret, string $storagePath, $environment = Environments::PROD)
     {
         // check if storage path exists & is writable, throw exception if not
         $this->api = new ApiService(
-            $apiKey,
+            $clientId,
+            $clientSecret,
             $storagePath,
             $environment
         );

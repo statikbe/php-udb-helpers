@@ -7,12 +7,12 @@ enum Environments
     case TEST;
 
     case PROD;
-
-    public function getJWTUrl(): string
+    
+    public function getOAuthUrl(): string
     {
         return match ($this) {
-            self::TEST => 'https://jwt-test.uitdatabank.be',
-            self::PROD => 'https://jwt.uitdatabank.be',
+            self::TEST => 'https://account-test.uitid.be',
+            self::PROD => 'https://account.uitid.be',
         };
     }
 
