@@ -16,12 +16,14 @@ class ApiService extends AuthService
 
     private Environments $environment;
 
-    public function __construct($apiKey, $storagePath, Environments $environment)
+    public function __construct($clientId, $clientSecret, $storagePath, Environments $environment)
     {
-        parent::__construct($apiKey, $storagePath, $environment);
-        $this->apiKey = $apiKey;
+        parent::__construct($clientId, $clientSecret,  $storagePath, $environment);
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
         $this->environment = $environment;
         $this->endpoint = $environment->getEndpoint();
+        $this->authUrl = $environment->getOAuthUrl();
         $this->accessToken = $this->getAccessToken();
     }
 
@@ -38,7 +40,6 @@ class ApiService extends AuthService
             $tries++;
             $headers = array_merge($headers, [
                 "Authorization" => "Bearer {$this->getAccessToken()}",
-                "X-Api-Key" => $this->apiKey,
             ]);
             try {
                 $request = new Request(
@@ -140,7 +141,6 @@ class ApiService extends AuthService
 
                     $headers = [
                         "Authorization" => "Bearer {$this->getAccessToken()}",
-                        "X-Api-Key" => $this->apiKey,
                     ];
 
                     $request = new Request(

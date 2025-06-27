@@ -3,23 +3,23 @@
 namespace statikbe\udb\services\entry;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use statikbe\udb\Environments;
 
 class AuthService
 {
     protected $apiKey;
-
-    private $jwtUrl;
+    protected $clientId;
+    protected $clientSecret;
+    protected $authUrl;
 
     private $storagePath;
     private Environments $environment;
 
 
-    public function __construct($apiKey, $storagePath, Environments $environment)
+    public function __construct($clientId, $clientSecret, $storagePath, Environments $environment)
     {
-        $this->apiKey = $apiKey;
-        $this->jwtUrl = $environment->getJWTUrl();
-
+        $this->authUrl = $environment->getOAuthUrl();
         $this->storagePath = $storagePath;
         $this->environment = $environment;
     }
@@ -32,7 +32,12 @@ class AuthService
                     $this->storagePath
                 );
                 $credentials = json_decode($file, true);
-                return $credentials['accessToken'];
+                if(!$credentials || !isset($credentials['access_token'])) {
+                    $this->refreshAccessToken();
+                    $file = file_get_contents($this->storagePath); // Re-read the updated token file
+                    $credentials = json_decode($file, true);
+                }
+                return $credentials['access_token'];
             }
         } catch (\Exception $e) {
             throw $e;
@@ -40,31 +45,24 @@ class AuthService
         return null;
     }
 
-    /** Use this function the first time to create your tokens.
-     * And manually save them in /data/udb-tokens/credentials.json
-     *
-     * Use the destination parameter to set the redirect URL.
-     *
-     * {
-     *   "accessToken":"access_token_from_url",
-     *   "refreshToken":"refresh_token_from_url",
-     * }
-     */
-    public function generalJwtUrl($destination = "oob"): string
-    {
-        return $this->jwtUrl . '/connect?apiKey=' . $this->apiKey . "&destination={$destination}";
-    }
-
     public function refreshAccessToken(): void
     {
         try {
-            $requestUrl = $this->jwtUrl . '/refresh?apiKey=' . $this->apiKey . '&refresh=' . $this->getRefreshToken();
+            $url = $this->authUrl . "/realms/uitid/protocol/openid-connect/token";
             $client = new Client();
-            $response = $client->get($requestUrl);
-            $accessToken = $response->getBody()->getContents();
-            $this->updateAccessToken($accessToken);
+
+            $request = new Request(
+                "POST",
+                $url,
+                [
+                    "Content-Type" => "application/x-www-form-urlencoded",
+                ],
+                "grant_type=client_credentials&client_id={$this->clientId}&client_secret={$this->clientSecret}");
+
+            $response = $client->send($request);
+            $body = $response->getBody()->getContents();
+            $this->updateAccessToken($body);
         } catch (\Exception $e) {
-            dd($e);
             throw $e;
         }
     }
@@ -87,19 +85,16 @@ class AuthService
         return null;
     }
 
-    private function updateAccessToken($accessToken): void
+    private function updateAccessToken($body): void
     {
         try {
             if (file_exists($this->storagePath)) {
                 $file = file_get_contents(
                     $this->storagePath
                 );
-                $credentials = json_decode($file, true);
-                $credentials['accessToken'] = $accessToken;
-                $fileContents = json_encode($credentials);
                 file_put_contents(
                     $this->storagePath,
-                    $fileContents
+                    $body
                 );
             }
         } catch (\Exception $e) {

@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.0 - 2025-07-27
+### Added 
+- Added support for authentication via client access tokens
+### Removed
+- Removed support for authentication via JWT tokens
+
 ## 1.6.2 - 2025-04-04
 ### Added
 - Added an optional "destination" parameter to the authUrl, to facilitate automatically updating tokens.
