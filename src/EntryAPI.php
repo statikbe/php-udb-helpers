@@ -67,6 +67,11 @@ class EntryAPI
         return $this->api->get('/organizers/' . $id);
     }
 
+    public function addContributors($id, $data): array
+    {
+        return $this->api->post($data, "/events/{$id}/contributors", "PUT");
+    }
+
     public function createEvent($data): array
     {
         return $this->api->post($data, '/events');
