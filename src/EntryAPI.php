@@ -82,7 +82,7 @@ class EntryAPI
         return $this->api->post($data, '/events/' . $id, "PUT");
     }
 
-    public function deleteEvent($id): array
+    public function deleteEvent($id): bool
     {
         return $this->api->delete('/events/' . $id);
     }

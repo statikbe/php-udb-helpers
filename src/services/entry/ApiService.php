@@ -18,7 +18,7 @@ class ApiService extends AuthService
 
     public function __construct($clientId, $clientSecret, $storagePath, Environments $environment)
     {
-        parent::__construct($clientId, $clientSecret,  $storagePath, $environment);
+        parent::__construct($clientId, $clientSecret, $storagePath, $environment);
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->environment = $environment;
@@ -96,7 +96,6 @@ class ApiService extends AuthService
 
                     $headers = [
                         "Authorization" => "Bearer {$this->getAccessToken()}",
-                        "X-Api-Key" => $this->apiKey,
                     ];
 
                     $request = new Request(
@@ -104,7 +103,7 @@ class ApiService extends AuthService
                     );
 
                     $response = $client->send($request);
-                    if($response->getStatusCode() == 204) {
+                    if ($response->getStatusCode() == 204) {
                         return true;
                     }
                 } catch (ClientException $e) {
