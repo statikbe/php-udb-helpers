@@ -88,15 +88,10 @@ class AuthService
     private function updateAccessToken($body): void
     {
         try {
-            if (file_exists($this->storagePath)) {
-                $file = file_get_contents(
-                    $this->storagePath
-                );
-                file_put_contents(
-                    $this->storagePath,
-                    $body
-                );
-            }
+            file_put_contents(
+                $this->storagePath,
+                $body
+            );
         } catch (\Exception $e) {
             throw $e;
         }
