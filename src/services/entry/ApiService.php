@@ -10,7 +10,7 @@ use statikbe\udb\Environments;
 
 class ApiService extends AuthService
 {
-    private string $accessToken;
+    private ?string $accessToken;
 
     private string $endpoint;
 
