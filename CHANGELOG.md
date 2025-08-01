@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.2 - 2025-08-01
+### Fixed
+- Better type hinting for accessToken, which prevents an error on the first connection
+
 ## 2.1.1 - 2025-07-31
 ### Fixed
 - Fixed delete function
