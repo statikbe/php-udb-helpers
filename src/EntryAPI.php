@@ -37,8 +37,13 @@ class EntryAPI
     public function createPlace($data): array
     {
         $address = $data['address']['nl'];
+        $name = isset($data['name']) ? $data['name']['nl'] : false;
 
-        $params = ["embed" => true, "q" => "name:{$data['name']['nl']} AND address.nl.streetAddress:{$address['streetAddress']} AND address.nl.postalCode:{$address['postalCode']}", "disableDefaultFilters" => true, "languages" => ["nl"]];
+        $params = ["embed" => true, "q" => "address.nl.streetAddress:{$address['streetAddress']} AND address.nl.postalCode:{$address['postalCode']}", "disableDefaultFilters" => true, "languages" => ["nl"]];
+
+        if ($name) {
+            $params = array_merge($params, ["text" => $name, "languages" => ["nl"]]);
+        }
 
         $existingPlace = $this->searchPlaces($params);
 
