@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.6 - 2025-10-29
+### Fixed
+- Fixed searching for places with dashes in the name
+
 ## 2.1.5 - 2025-10-29
 ### Fixed
 - Fixed a missing return type when deleting an event
