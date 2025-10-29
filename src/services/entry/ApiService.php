@@ -117,7 +117,7 @@ class ApiService extends AuthService
             throw $e;
         }
 
-        return $responseStatus;
+        return false;
 
     }
 
