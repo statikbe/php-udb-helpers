@@ -42,7 +42,8 @@ class EntryAPI
         $params = ["embed" => true, "q" => "address.nl.streetAddress:{$address['streetAddress']} AND address.nl.postalCode:{$address['postalCode']}", "disableDefaultFilters" => true, "languages" => ["nl"]];
 
         if ($name) {
-            $params = array_merge($params, ["text" => $name, "languages" => ["nl"]]);
+            // We're removing dashes from the name, otherwise places with a dash in the name are not found
+            $params = array_merge($params, ["text" => str_replace('-', '', $name), "languages" => ["nl"]]);
         }
 
         $existingPlace = $this->searchPlaces($params);
