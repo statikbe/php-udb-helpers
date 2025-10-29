@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.5 - 2025-10-29
+### Fixed
+- Fixed a missing return type when deleting an event
+
 ## 2.1.4 - 2025-08-25
 ### Fixed
 - Fixed a bug when searching for a location by name
