@@ -1,6 +1,5 @@
 # UDB Helpers for PHP
 
-
 ## Installation
 
 First, install the package through composer:
@@ -9,7 +8,7 @@ First, install the package through composer:
 composer require statikbe/udb-helpers
 ````
 
-Then you can instanciate the EntryAPI class with the following parameters:
+## EntryAPI Initialization
 
 `````php
 use statikbe\udb\EntryAPI;
@@ -23,74 +22,115 @@ $udb = new EntryAPI(
 );
 
 `````
-## Usage
+
+### Usage
 
 Once you've authenticated with the API, you can use the following functions:
 
+#### Searching for places
 
-### Searching for places
 ````php
 $udb->searchPlaces([]);
 ````
-The function takes on array of potential search parameters, those can be found [here](https://docs.publiq.be/docs/uitdatabank/search-api/reference/operations/list-places)
 
+The function takes on array of potential search parameters, those can be
+found [here](https://docs.publiq.be/docs/uitdatabank/search-api/reference/operations/list-places)
 
-### Get all details for a specific place
+#### Get all details for a specific place
+
 ````php
 $udb->getPlace($placeId);
 ````
 
-### Create a place
-The data passed should be an array, with fields that match the [place model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/create-a-place).
+#### Create a place
+
+The data passed should be an array, with fields that match
+the [place model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/create-a-place).
+
 ````php
 $udb->createPlace($data);
 ````
 
+#### Searching for Organizers
 
----
-
-### Searching for Organizers
 ````php
 $udb->searchOrganizers([]);
 ````
-The function takes on array of potential search parameters, those can be found [here](https://docs.publiq.be/docs/uitdatabank/search-api/reference/operations/list-organizers)
 
+The function takes on array of potential search parameters, those can be
+found [here](https://docs.publiq.be/docs/uitdatabank/search-api/reference/operations/list-organizers)
 
-### Get all details for a specific organizer
+#### Get all details for a specific organizer
+
 ````php
 $udb->getOrganizer($organizerId);
 ````
 
-### Create an organizer
-The data passed should be an array, with fields that match the [organizer model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/create-a-organizer).
+#### Create an organizer
+
+The data passed should be an array, with fields that match
+the [organizer model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/create-a-organizer).
+
 ````php
 $udb->createOrganizer($data);
 ````
 
----
+#### Create an event
 
-### Create an event
-The data passed should be an array, with fields that match the [event model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/create-a-event).
+The data passed should be an array, with fields that match
+the [event model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/create-a-event).
+
 ````php
 $udb->createEvent($data);
 ````
 
-### Update an event
-The data passed should be an array, with fields that match the [event model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/update-a-event).
+#### Update an event
+
+The data passed should be an array, with fields that match
+the [event model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/update-a-event).
+
 ````php
 $udb->updateEvent($eventId, $data);
 ````
 
-### Update the workflowStatus of an event
-The data passed should be an array, with fields that match the [workflowStatus model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/update-a-event-workflow-status).
+#### Update the workflowStatus of an event
+
+The data passed should be an array, with fields that match
+the [workflowStatus model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/update-a-event-workflow-status).
+
 ````php
 $udb->updateWorkflowStatus($eventId, $data);
 ````
 
-### Update the workflowStatus of a place
-The data passed should be an array, with fields that match the [workflowStatus model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/update-a-place-workflow-status).
+#### Update the workflowStatus of a place
+
+The data passed should be an array, with fields that match
+the [workflowStatus model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/update-a-place-workflow-status).
+
 ````php
 $udb->updatePlaceWorkflowStatus($eventId, $data);
 ````
 
-// More to be added as we further develop this package.
+---
+
+## SearchAPI Initialization
+
+```php
+
+use statikbe\udb\Environments;
+use statikbe\udb\SearchAPI;
+
+$udb = new SearchAPI(
+    getenv("UDB_CLIENT_ID"),
+    Environments::PROD
+);
+```
+
+### Searching for events by label
+
+````php
+$udb->searchEvents([
+    'labels' => 'value', 
+    'embed' => true
+]);
+````
