@@ -23,4 +23,13 @@ enum Environments
             self::PROD => 'https://io.uitdatabank.be',
         };
     }
+
+    public function getSearchEndpoint(): string
+    {
+        return match ($this) {
+            self::TEST => 'https://search-test.uitdatabank.be',
+            self::PROD => 'https://search.uitdatabank.be',
+        };
+    }
 }
+
