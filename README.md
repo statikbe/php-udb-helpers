@@ -111,6 +111,15 @@ the [workflowStatus model](https://docs.publiq.be/docs/uitdatabank/entry-api/ref
 $udb->updatePlaceWorkflowStatus($eventId, $data);
 ````
 
+#### Update the availableFrom date of an event
+
+The data passed should be an array, with fields that match
+the [availableFrom model](https://docs.publiq.be/docs/uitdatabank/entry-api/reference/operations/update-a-event-available-from).
+
+````php
+$udb->updateAvailableFrom($eventId, $data);
+````
+
 ---
 
 ## SearchAPI Initialization
