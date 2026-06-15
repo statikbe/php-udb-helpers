@@ -3,7 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 3.0.0 - Unreleased
+## 3.1.0 - 2026-06-15
+### Added
+- Added `updateAvailableFrom` function
+
+## 3.0.0 - 2025-12-15
 ### Added
 - Added support for SearchApi
 
