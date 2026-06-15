@@ -12,6 +12,9 @@
 /build/*
 /yarn-error.log
 
+# CLAUDE
+CLAUDE.md
+
 # MISC FILES
 .cache
 .DS_Store
