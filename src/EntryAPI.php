@@ -98,6 +98,11 @@ class EntryAPI
         return $this->api->post($data, '/events/' . $id . '/workflow-status', "PUT");
     }
 
+    public function updateAvailableFrom($id, $data)
+    {
+        return $this->api->post($data, '/events/' . $id . '/available-from', "PUT");
+    }
+
     public function updatePlaceWorkflowStatus($id, $data)
     {
         return $this->api->post($data, '/places/' . $id . '/workflow-status', "PUT");
